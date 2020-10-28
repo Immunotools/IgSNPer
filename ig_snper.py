@@ -100,10 +100,12 @@ class IgSNPerConfig:
         sys.exit(0)
 
     def _CreateDirs(self):
-        dirs = ['alleles', 'genotypes', 'haplotypes', 'snp_plots', 'html', 'haplotypes_txt', 'snp_txt', 'subject_snp_txt']
+        dir_dict = {'alleles' : 'plot_alleles', 'genotypes' : 'plot_genotypes', 'haplotypes' : 'plot_haplotypes',
+                    'snp_plots' : 'plot_snps', 'html' : 'html_reports', 'haplotypes_txt' : 'txt_haplotypes_by_gene',
+                    'snp_txt' : 'txt_snps_by_gene', 'subject_snp_txt' : 'txt_snp_by_subject'}
         dir_config = dict()
-        for d in dirs:
-            dir_config[d] = os.path.join(self.output_dir, d)
+        for d in dir_dict:
+            dir_config[d] = os.path.join(self.output_dir, dir_dict[d])
             os.mkdir(dir_config[d])
         return dir_config
 
