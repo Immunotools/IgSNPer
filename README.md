@@ -14,7 +14,7 @@ genotype_dir1         project_id1
 genotype_dir2         project_id2
 genotype_dir3         project_id3
 ```
-where genotype_dir1-3 are directories containing individual IGHV alleles inferred by TigGER tool (Gadala-Maria et al., 2019). 
+where genotype_dir1-3 are directories containing individual IGHV alleles inferred by TigGER tool (Gadala-Maria et al., 2019). project_id1-3 will be used in IgSNPer output files.
 
 ## Requirements:
 - python 2 or 3
