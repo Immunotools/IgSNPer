@@ -119,6 +119,9 @@ class AnnotatedGene:
     def ContainsIndividual(self, ind_id):
         return ind_id in self.ind_haplotype_dict
 
+    def GetHaplotypeByIndividual(self, ind_id):
+        return self.ind_haplotype_dict[ind_id]
+
     def GetSNPsByIndividual(self, ind_id, snp_pos):
         haplotype = self.ind_haplotype_dict[ind_id]
         nucls = allele_basic.NuclsToStr(haplotype.GetNucleotidesByPosition(snp_pos))

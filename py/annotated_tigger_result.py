@@ -28,7 +28,8 @@ class AnnotatedTiggerResult:
                 continue
             self.gene_allele_dict[gene] = []
             for allele, count in counted_alleles:
-                self.gene_allele_dict[gene].append(self.allele_constructor.CreateAnnotateAllele(gene, allele))
+                self.gene_allele_dict[gene].append(self.allele_constructor.CreateAnnotateAllele(gene, allele,
+                                                                                                self.raw_tigger.Individual()))
 
     def _CheckGeneFatal(self, gene):
         if gene not in self.gene_allele_dict:

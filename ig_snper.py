@@ -33,7 +33,7 @@ def ProcessRawTiggerResults(config_df, allele_storage, imgt_numbered_alleles, ou
             basename = os.path.basename(f)
             ind_id = basename[ : len(basename) - len('_geno_H_binom.tab')]
             tigger_df = pd.read_csv(full_path, sep = '\t')
-            raw_result = raw_tigger_results.RawTiggerResult(tigger_df, logger)
+            raw_result = raw_tigger_results.RawTiggerResult(tigger_df, (project_id, ind_id), logger)
             annotated_result = annotated_tigger_result.AnnotatedTiggerResult(raw_result, allele_storage,
                                                                              imgt_numbered_alleles, logger)
             output_fname = os.path.join(project_dir, basename + '.txt')
@@ -166,7 +166,7 @@ def main(args):
 #    novel_allele_vis.OutputAllelePositions(os.path.join(config.output_dir, '_novel_pos.pdf'))
 #    novel_allele_vis.OutputPutativePositions(os.path.join(config.output_dir, '_putative_novel_pos.pdf'))
     gene_vis = annotated_gene_vis.AnnotatedGeneVisualizer(logger)
-    snp_writer = snp_result_writer.SNPResultWriter()
+    snp_writer = snp_result_writer.SNPResultWriter(allele_storage)
     OutputIndividualSNPs(annotated_dict.keys(), annotated_results, snp_writer, config.SubjectSNPDir())
     OutputResultsPerGene(annotated_results, snp_writer, gene_vis, config, logger)
 

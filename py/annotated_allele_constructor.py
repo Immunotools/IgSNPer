@@ -11,7 +11,7 @@ class AnnotatedAlleleConstructor:
         self.allele_storage = allele_storage
         self.imgt_numbered_alleles = imgt_numbered_alleles
 
-    def CreateAnnotateAllele(self, v_gene, inferred_allele):
+    def CreateAnnotateAllele(self, v_gene, inferred_allele, ind_id):
         """
         @type inferred_allele : InferredAllele
         """
@@ -49,6 +49,9 @@ class AnnotatedAlleleConstructor:
                                     [inferred_allele_id], novel_snps)
 
     def _ComputeSNPList(self, allele_ids, aligned_imgt_alleles, main_allele_id):
+        """
+        @type aligned_imgt_alleles : aligned_alleles.AlignedAlleles
+        """
         snp_list = []
         ambiguous_positions = []
         for p in aligned_imgt_alleles.PolymoprhismIter():
@@ -60,11 +63,12 @@ class AnnotatedAlleleConstructor:
                     amb_nucls[allele_nucl] = 0
                 amb_nucls[allele_nucl] += 1
             final_nucl = list(amb_nucls.keys())[0]
+            main_allele_pos = aligned_imgt_alleles.GetAllelePosByAlignmentPos(main_allele_id, p) # !!!
             if len(amb_nucls) == 1 and final_nucl != min_allele_nucl:
-                snp_list.append((p, final_nucl))
+                snp_list.append((main_allele_pos, final_nucl))
             elif len(amb_nucls) > 1:
-                snp_list.append((p, '*'))
-                ambiguous_positions.append(p)
+                snp_list.append((main_allele_pos, '*'))
+                ambiguous_positions.append(main_allele_pos)
         return snp_list, ambiguous_positions
 
     def _CreateSequenceBySNPList(self, aligned_seq_list, snp_set, ambiguous_positions):
@@ -76,13 +80,18 @@ class AnnotatedAlleleConstructor:
 
     def _GetNovelModifications(self, imgt_allele, allele_id, aligned_imgt_alleles,
                                      inferred_modifications):
+        """
+        @type aligned_imgt_alleles : aligned_alleles.AlignedAlleles
+        """
         novel_descr = []
         novel_snps = []
+        main_allele = aligned_imgt_alleles.MinimalAlleleId()
         for m in inferred_modifications:
             allele_pos = imgt_allele.GetPositionByIMGTPosition(m.Pos())
             aligned_pos = aligned_imgt_alleles.GetAlignmentPosByAllelePos(allele_id, allele_pos)
-            novel_snps.append((aligned_pos, m.DstNucl()))
-            novel_descr.append(str(aligned_pos) + ':' + m.DstNucl())
+            main_allele_pos = aligned_imgt_alleles.GetAllelePosByAlignmentPos(main_allele, aligned_pos) # !!!
+            novel_snps.append((main_allele_pos, m.DstNucl()))
+            novel_descr.append(str(main_allele_pos) + ':' + m.DstNucl())
         return novel_descr, novel_snps
 
     def _MergeSNPLists(self, known_snps, novel_snps):

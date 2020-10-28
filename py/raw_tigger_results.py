@@ -10,8 +10,8 @@ import seaborn as sns
 import allele_basic
 
 class RawTiggerResult:
-    def __init__(self, genotype_df, logger):
-        self.ind_id = "" #ind_id
+    def __init__(self, genotype_df, ind_id, logger):
+        self.ind_id = ind_id
         self.genotype_df = genotype_df
         self.logger = logger
         self._CreateGeneDict()

@@ -42,7 +42,7 @@ class AlignedAlleles:
             self.alignment_bounds[allele_id] = bounds
 
     def _FindPolymorphicPositions(self):
-        self.polymorphic_positions = []
+        self.polymorphic_positions = [] # positions in multiple alignment
         for i in range(self.aligned_length):
             nucleotides = []
             for allele_id in self.aligned_dict:
@@ -51,8 +51,8 @@ class AlignedAlleles:
             nucl_dict = Counter(nucleotides)
             if len(nucl_dict) == 1:
                 continue
-            if len(nucl_dict) == 2 and '-' in nucl_dict.keys():
-                continue
+#            if len(nucl_dict) == 2 and '-' in nucl_dict.keys():
+#                continue
             self.polymorphic_positions.append(i)
 
     def _MapPolymorphicPositions(self):
@@ -103,7 +103,11 @@ class AlignedAlleles:
         return -1
 
     def GetNucleotideByAlleleAndPos(self, allele_id, alignment_pos):
-        return self.aligned_dict[allele_id][self.GetAllelePosByAlignmentPos(allele_id, alignment_pos)]
+        return self.aligned_dict[allele_id][alignment_pos]
+#        return self.aligned_dict[allele_id][self.GetAllelePosByAlignmentPos(allele_id, alignment_pos)]
+
+    def GetNucleotideByAlleleAndAllelePos(self, allele_id, allele_pos):
+        return self.aligned_dict[allele_id][self.GetAlignmentPosByAllelePos(allele_id, allele_pos)]
 
     def ContainsAllele(self, allele_id):
         return allele_id in self.aligned_dict
