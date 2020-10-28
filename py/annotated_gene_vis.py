@@ -75,6 +75,7 @@ class AnnotatedGeneVisualizer:
         plt.suptitle(gene.V())
         self._Savefig(output_base)
         plt.clf()
+        plt.close()
 
     def _ProcessGenotypeMatrix(self, annot_matrix):
         matrix = []
@@ -138,6 +139,7 @@ class AnnotatedGeneVisualizer:
         plt.suptitle(gene.V())
         self._Savefig(output_base)
         plt.clf()
+        plt.close()
         # heatmap separately
         plt.figure()
         sns.heatmap(matrix, annot=np.array(annot_matrix), fmt='', yticklabels=df['Descr'], xticklabels=snp_str,
@@ -145,6 +147,7 @@ class AnnotatedGeneVisualizer:
         plt.yticks(rotation = 0)
         plt.savefig(output_base + '_hmap.pdf')
         plt.clf()
+        plt.close()
 
     def VisualizeHaplotypes(self, gene, output_base):
         if len(gene.SNPs()) == 0:
@@ -181,6 +184,7 @@ class AnnotatedGeneVisualizer:
         plt.title(gene.V())
         self._Savefig(output_base)
         plt.clf()
+        plt.close()
 
     def OutputHaplotypesByGene(self, gene, output_fname):
         """
@@ -213,3 +217,4 @@ class AnnotatedGeneVisualizer:
             plt.title(gene.V() + ', position ' + str(snp_pos))
             self._Savefig(os.path.join(output_dir, genebase + '_' + str(snp_pos)))
             plt.clf()
+            plt.close()

@@ -59,7 +59,7 @@ class AnnotatedAlleleConstructor:
                 if allele_nucl not in amb_nucls:
                     amb_nucls[allele_nucl] = 0
                 amb_nucls[allele_nucl] += 1
-            final_nucl = amb_nucls.keys()[0]
+            final_nucl = list(amb_nucls.keys())[0]
             if len(amb_nucls) == 1 and final_nucl != min_allele_nucl:
                 snp_list.append((p, final_nucl))
             elif len(amb_nucls) > 1:

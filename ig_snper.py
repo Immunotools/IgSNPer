@@ -82,7 +82,7 @@ class IgSNPerConfig:
         try:
             options, remainder = getopt.getopt(args[1:], 'c:o:', ['help'])
         except getopt.GetoptError as err:
-            print str(err)  # will print something like "option -a not recognized"
+            print(str(err))  # will print something like "option -a not recognized"
             sys.exit(2)
         for opt, arg in options:
             if opt == "-c":
