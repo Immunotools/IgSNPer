@@ -82,29 +82,29 @@ class HTMLWriter:
 
 
 class ReportCompiler:
-    def __init__(self, dir_config, output_fname, gene):
+    def __init__(self, config, output_fname, gene):
         """
         @type gene : annotated_gene.AnnotatedGene
         """
         self.image_format = '.svg'
-        self.dir_config = dir_config
+        self.config = config
         self.output_fname = output_fname
         self.gene = gene
         self.v = gene.V()
         self.mod_v = allele_basic.ModifyGeneName(self.v)
 
     def _GetAlleleImage(self):
-        return os.path.join(self._CreateSubPath(self.dir_config['alleles']), self.mod_v + self.image_format)
+        return os.path.join(self._CreateSubPath(self.config.AlleleDir()), self.mod_v + self.image_format)
 
     def _GetGenotypeImage(self):
-        return os.path.join(self._CreateSubPath(self.dir_config['genotypes']), self.mod_v + self.image_format)
+        return os.path.join(self._CreateSubPath(self.config.GenotypeDir()), self.mod_v + self.image_format)
 
     def _GetHaplotypeImage(self):
-        return os.path.join(self._CreateSubPath(self.dir_config['haplotypes']), self.mod_v + self.image_format)
+        return os.path.join(self._CreateSubPath(self.config.HaplotypeDir()), self.mod_v + self.image_format)
 
     def _GetSNPImages(self):
-        snp_images = os.listdir(self.dir_config['snps'])
-        return [os.path.join(self._CreateSubPath(self.dir_config['snps']), f) for f in snp_images if
+        snp_images = os.listdir(self.config.SNPPlotDir())
+        return [os.path.join(self._CreateSubPath(self.config.SNPPlotDir()), f) for f in snp_images if
                 f.find(self.mod_v) != -1 and f.find(self.image_format) != -1]
 
     def _CreateSubPath(self, path):

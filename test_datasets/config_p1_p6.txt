@@ -1,0 +1,3 @@
+TiggerOutputDir	ProjectID
+data/vdjbase/tigger_results_p1/Genotypes	p1
+data/vdjbase/tigger_results_p6/genotypes/Genotypes	p6

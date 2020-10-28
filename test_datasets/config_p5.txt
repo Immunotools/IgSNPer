@@ -1,0 +1,2 @@
+TiggerOutputDir	ProjectID
+data/vdjbase/tigger_results_p5/genotypes/Genotypes	p5
