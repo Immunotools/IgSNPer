@@ -5,9 +5,10 @@ a tool for transforming immunoglobulin V gene (IGHV) alleles into Single Nucleot
 ## Requirements
 - python 2 or 3
 - Biopython
-- Seaborn
+- Matplotlib
 - NumPy
 - pandas
+- seaborn
 
 ## Usage
 ```
@@ -81,4 +82,4 @@ p1	P1_I1_S1	IGHV3-53    1-4	        213	    C/G	    1
 p1	P1_I1_S1	IGHV3-53    1-4	        260	    C/T	    1
 ...
 ```
-Each line corresponds to a single V gene SNP described by a position (the column `Pos`) and a state (the column `State`). Positions are 0-based and given with respect to the IMGT allele with the minimum identifier. The identifier of an allele is the number coming after `*` in the allele name, e.g., identifier of allele `IGHV1-69*10` is `10`. The identifier of this allele determining the SNP position is provided in the column `AllelePos`. E.g., positions of SNPs of `IGHV1-18` are provided with respect to allele `IGHV1-18*01`.
+Each line corresponds to a single V gene SNP described by a position (the column `Pos`) and a state (the column `State`). Positions are 0-based and given with respect to the IMGT allele with the minimum identifier. The identifier of an allele is the number coming after `*` in the allele name, e.g., identifier of allele `IGHV1-69*10` is `10`. The identifier of the allele determining the SNP position is provided in the column `AllelePos`. E.g., positions of SNPs of `IGHV1-18` are provided with respect to allele `IGHV1-18*01`.
