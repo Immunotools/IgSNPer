@@ -1,6 +1,6 @@
 # IgSNPer
 
-a tool for transformation of immunoglobulin V gene (IGHV) alleles into Single Nucleotide Polymorphisms (SNPs).
+a tool for transforming immunoglobulin V gene (IGHV) alleles into Single Nucleotide Polymorphisms (SNPs).
 
 ## Usage: 
 ```
