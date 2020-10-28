@@ -2,6 +2,13 @@
 
 a tool for transforming immunoglobulin V gene (IGHV) alleles into Single Nucleotide Polymorphisms (SNPs).
 
+## Requirements:
+- python 2 or 3
+- Biopython
+- Seaborn
+- NumPy
+- pandas
+
 ## Usage: 
 ```
 python ig_snper.py -c config.txt -o output_dir
@@ -12,27 +19,21 @@ Example:
 python ig_snper.py -c test_datasets/config_p1.txt -o ig_snper_p1_processed
 ```
 
-## Config format:
+## Input files
+### Config format:
 ```
 TiggerOutputDir       ProjectID
 Genotype_dir1         Project_id1
 Genotype_dir2         Project_id2
 Genotype_dir3         Project_id3
 ```
-where `Genotype_dirN` is a directory containing individual IGHV alleles inferred by TigGER tool (Gadala-Maria et al., 2019). Project identifier `Project_idN` will be used in IgSNPer output files. An example of TiggerOutputDir can be found in `data/vdjbase/tigger_results_p1/Genotypes`, it corresponds to the project P1 (PRJEB26509; Gidoni et al., 2019) at the VDJbase (https://www.vdjbase.org/). The config file for the P1 project can be found in `test_datasets/config_p1.txt` and looks like this:
+`Genotype_dirN` is a directory containing individual IGHV alleles inferred by TigGER tool (Gadala-Maria et al., 2019). Project identifier `Project_idN` is used in IgSNPer output files. An example of TiggerOutputDir can be found in `data/vdjbase/tigger_results_p1/Genotypes`, it corresponds to the project P1 (PRJEB26509; Gidoni et al., 2019) at the VDJbase (https://www.vdjbase.org/). The config file for the P1 project can be found in `test_datasets/config_p1.txt` and looks like this:
 ```
 TiggerOutputDir	                          ProjectID
 data/vdjbase/tigger_results_p1/Genotypes  p1
 ```
 
-## Requirements:
-- python 2 or 3
-- Biopython
-- Seaborn
-- NumPy
-- pandas
-
-## Input genotype files
+### TigGER genotype files
 IgSNPer scans the directories described in the config and seeks for genotype files reported by TIgGER with names in the following format:
 ```
 individualId_geno_H_binom.tab
@@ -42,7 +43,7 @@ Individual identifiers are extracted by IgSNPer and used in output files.
 
 
 ## Output files
-IgSNPer creates an output directory with the following structure:
+IgSNPer creates an output directory `output_dir` with the following structure:
 ```
 output_dir
 |_ html_reports
