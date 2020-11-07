@@ -18,6 +18,41 @@ import report_writer
 import novel_allele_visualizer
 import snp_result_writer
 
+# Translate Tigger file columns from new to old format, if necessary
+trans_cols = {
+    "gene": 'GENE',
+    "alleles": 'ALLELES',
+    "counts": 'COUNTS',
+    "total": 'TOTAL',
+    "note": 'NOTE',
+    "kh": 'KH',
+    "kd": 'KD',
+    "kt": 'KT',
+    "kq": 'KQ',
+    "k_diff": 'K_DIFF',
+    "subject": 'SUBJECT',
+    "priors_row": 'PRIORS_ROW',
+    "priors_col": 'PRIORS_COL',
+    "counts1": 'COUNTS1',
+    "counts2": 'COUNTS2',
+    "counts3": 'COUNTS3',
+    "counts4": 'COUNTS4',
+    "k1": 'K1',
+    "k2": 'K2',
+    "k3": 'K3',
+    "k4": 'K4',
+}
+
+def trans_tigger_df(df):
+    renames = list(set(df.columns.values) & set(trans_cols.keys()))
+
+    if len(renames) > 0:
+        trans = {x: trans_cols[x] for x in renames}
+        df = df.rename(columns=trans)
+
+    return df
+
+
 def ProcessRawTiggerResults(config_df, allele_storage, imgt_numbered_alleles, output_dir, logger):
     annotated_results = dict()
 
@@ -38,15 +73,13 @@ def ProcessRawTiggerResults(config_df, allele_storage, imgt_numbered_alleles, ou
                 ind_id = basename[ : len(basename) - len('_geno_H_binom.tab')]
                 tigger_files.append({'project_id': row['ProjectID'], 'ind_id': ind_id, 'path': full_path})
 
-    tigger_files = tigger_files[1:5]
-
     for tigger_file in tigger_files:
         project_dir = os.path.join(output_dir, tigger_file['project_id'] + '_processed')
 
         if not os.path.isdir(project_dir):
             os.mkdir(project_dir)
 
-        tigger_df = pd.read_csv(tigger_file['path'], sep = '\t')
+        tigger_df = trans_tigger_df(pd.read_csv(tigger_file['path'], sep = '\t'))
         raw_result = raw_tigger_results.RawTiggerResult(tigger_df, (tigger_file['project_id'], tigger_file['ind_id']), logger)
         annotated_result = annotated_tigger_result.AnnotatedTiggerResult(raw_result, allele_storage,
                                                                          imgt_numbered_alleles, logger)
