@@ -37,7 +37,7 @@ def GetColorByNormalizedValue(cmap_name, norm_value):
     if norm_value < 0 or norm_value > 1:
         logging.warning("ERROR: value " + str(norm_value) + ' does not belong to [0, 1]')
     cmap = plt.cm.get_cmap(cmap_name)
-    color = cmap(norm_value) 
+    color = cmap(norm_value)
     return mplt.colors.rgb2hex(color[:3])
 
 ##########################################################################
@@ -46,7 +46,7 @@ def GetBaseGeneName(gene_id):
 
 def PrepareOutputDir(output_dir):
     if os.path.exists(output_dir):
-        shutil.rmtree(output_dir)
+        shutil.rmtree(output_dir, ignore_errors=True, onerror=None)
     os.mkdir(output_dir)
 
 ##########################################################################

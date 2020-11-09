@@ -22,7 +22,7 @@ class RawTiggerResult:
             gene_id = self.genotype_df['GENE'][i]
             if gene_id.find('IGHV') == -1:
                 continue
-#            print 'Processing ' + gene_id
+#            print('Processing ' + gene_id)
             self.gene_dict[self.genotype_df['GENE'][i]] = allele_basic.CountedGeneAlleles()
             allele_str = str(self.genotype_df['GENOTYPED_ALLELES'][i]) # str(self.genotype_df['ALLELES'][i])
             counts_str = str(self.genotype_df['Freq_by_Clone'][i]) # str(self.genotype_df['COUNTS'][i])
@@ -31,7 +31,7 @@ class RawTiggerResult:
 #            print allele_str, counts_str
             allele_splits = allele_str.split(',')
 #            counts_str = ','.join(['100'] * len(allele_splits))
-            count_splits = counts_str.split(',')
+            count_splits = counts_str.split(',') if ',' in counts_str else counts_str.split(';')
             if len(allele_splits) != len(count_splits):
                 self.logger.warning("ERROR: fields " + str(allele_splits) + ' & ' + str(count_splits) +
                                     ' are not consistent')
@@ -43,8 +43,8 @@ class RawTiggerResult:
                     inferred_allele.ParseFromString(a)
                     self.gene_dict[self.genotype_df['GENE'][i]].Add(inferred_allele, count)
 #            for a, c in self.gene_dict[self.genotype_df['GENE'][i]]:
-#                print a, a.Type(), c
-#        print 'Alleles for ' + str(len(self.gene_dict)) + ' genes were extracted'
+#                print(a, a.Type(), c)
+#        print('Alleles for ' + str(len(self.gene_dict)) + ' genes were extracted')
 
     def Individual(self):
         return self.ind_id

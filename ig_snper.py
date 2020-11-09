@@ -18,27 +18,74 @@ import report_writer
 import novel_allele_visualizer
 import snp_result_writer
 
+# Translate Tigger file columns from new to old format, if necessary
+trans_cols = {
+    "gene": 'GENE',
+    "alleles": 'ALLELES',
+    "counts": 'COUNTS',
+    "total": 'TOTAL',
+    "note": 'NOTE',
+    "kh": 'KH',
+    "kd": 'KD',
+    "kt": 'KT',
+    "kq": 'KQ',
+    "k_diff": 'K_DIFF',
+    "subject": 'SUBJECT',
+    "priors_row": 'PRIORS_ROW',
+    "priors_col": 'PRIORS_COL',
+    "counts1": 'COUNTS1',
+    "counts2": 'COUNTS2',
+    "counts3": 'COUNTS3',
+    "counts4": 'COUNTS4',
+    "k1": 'K1',
+    "k2": 'K2',
+    "k3": 'K3',
+    "k4": 'K4',
+}
+
+def trans_tigger_df(df):
+    renames = list(set(df.columns.values) & set(trans_cols.keys()))
+
+    if len(renames) > 0:
+        trans = {x: trans_cols[x] for x in renames}
+        df = df.rename(columns=trans)
+
+    return df
+
+
 def ProcessRawTiggerResults(config_df, allele_storage, imgt_numbered_alleles, output_dir, logger):
     annotated_results = dict()
-    for i in range(len(config_df)):
-        project_id = config_df['ProjectID'][i]
-        project_dir = os.path.join(output_dir, project_id + '_processed')
-        os.mkdir(project_dir)
-        tigger_dir = config_df['TiggerOutputDir'][i]
-        tigger_files = os.listdir(tigger_dir)
-        for f in tigger_files:
-            if f == '.DS_Store':
-                continue
-            full_path = os.path.join(tigger_dir, f)
-            basename = os.path.basename(f)
-            ind_id = basename[ : len(basename) - len('_geno_H_binom.tab')]
-            tigger_df = pd.read_csv(full_path, sep = '\t')
-            raw_result = raw_tigger_results.RawTiggerResult(tigger_df, (project_id, ind_id), logger)
-            annotated_result = annotated_tigger_result.AnnotatedTiggerResult(raw_result, allele_storage,
-                                                                             imgt_numbered_alleles, logger)
-            output_fname = os.path.join(project_dir, basename + '.txt')
-            annotated_result.WriteToTxt(output_fname)
-            annotated_results[(project_id, ind_id)] = annotated_result
+
+    tigger_files = []
+
+    if 'TiggerFilePath' in config_df.columns:
+        for _, row in config_df.iterrows():
+            tigger_files.append({'project_id': row['ProjectID'], 'ind_id': row['SubjectID'], 'path': row['TiggerFilePath']})
+    else:
+        for _, row in config_df.iterrows():
+            tigger_dir = row['TiggerOutputDir']
+            cur_tigger_files = os.listdir(tigger_dir)
+            for f in cur_tigger_files:
+                if f == '.DS_Store':
+                    continue
+                full_path = os.path.join(tigger_dir, f)
+                basename = os.path.basename(f)
+                ind_id = basename[ : len(basename) - len('_geno_H_binom.tab')]
+                tigger_files.append({'project_id': row['ProjectID'], 'ind_id': ind_id, 'path': full_path})
+
+    for tigger_file in tigger_files:
+        project_dir = os.path.join(output_dir, tigger_file['project_id'] + '_processed')
+
+        if not os.path.isdir(project_dir):
+            os.mkdir(project_dir)
+
+        tigger_df = trans_tigger_df(pd.read_csv(tigger_file['path'], sep = '\t'))
+        raw_result = raw_tigger_results.RawTiggerResult(tigger_df, (tigger_file['project_id'], tigger_file['ind_id']), logger)
+        annotated_result = annotated_tigger_result.AnnotatedTiggerResult(raw_result, allele_storage,
+                                                                         imgt_numbered_alleles, logger)
+        output_fname = os.path.join(project_dir, tigger_file['ind_id'] + '.txt')
+        annotated_result.WriteToTxt(output_fname)
+        annotated_results[(tigger_file['project_id'], tigger_file['ind_id'])] = annotated_result
     return annotated_results
 
 
