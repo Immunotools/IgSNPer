@@ -64,8 +64,8 @@ def ProcessRawTiggerResults(config_df, allele_storage, imgt_numbered_alleles, ou
     else:
         for _, row in config_df.iterrows():
             tigger_dir = row['TiggerOutputDir']
-            tigger_files = os.listdir(tigger_dir)
-            for f in tigger_files:
+            cur_tigger_files = os.listdir(tigger_dir)
+            for f in cur_tigger_files:
                 if f == '.DS_Store':
                     continue
                 full_path = os.path.join(tigger_dir, f)
